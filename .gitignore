@@ -1,0 +1,26 @@
+# Ignore build output
+bin/
+obj/
+*.exe
+*.ilk
+*.pdb
+*.lib
+*.dll
+*.obj
+
+# Ignore Debug and Release directories
+Debug/
+Release/
+
+# Ignore Visual Studio temporary files
+.vs/
+build/
+
+# Ignore intermediate and temporary files
+*.log
+*.tmp
+*.tlog
+*.lastbuildstate
+
+launch.json
+tasks.json
