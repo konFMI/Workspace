@@ -1,4 +1,5 @@
 #include "solution.h"
+#include <climits>
 #include <cstddef>
 #include <utility>
 #include <string>
@@ -31,6 +32,11 @@ struct State {
     std::pair<int, int> blankPos;   // Used a pair to track the blank position
     int g;
     int h;
+
+    int f() const
+    {
+        return g+h;
+    }
 
     bool operator<(const State &other) const {
         return (g + h) > (other.g + other.h);
@@ -195,4 +201,60 @@ int AStar(std::vector<std::vector<int>> startBoard)
     }
 
     return -1;
+}
+
+// Improved IDAStar Implementation
+
+// Helper function to perform the IDA* search with a given bound.
+static bool IDAStarSearch(State& current, int bound, int& newBound, std::unordered_set<std::string>& visitedStates) {
+    int f = current.f(); // f = g + h
+    if (f > bound) {
+        newBound = std::min(newBound, f); // Update the new bound
+        return false;
+    }
+
+    if (current.h == 0) { // If Manhattan distance is 0, we've found the goal
+        return true;
+    }
+
+    visitedStates.insert(BoardToString(current.board)); // Mark the current state as visited
+
+    // Try all possible neighbors
+    for (auto& neighbor : GenerateNeighbors(current)) {
+        std::string key = BoardToString(neighbor.board);
+        if (visitedStates.find(key) == visitedStates.end()) {
+            if (IDAStarSearch(neighbor, bound, newBound, visitedStates)) {
+                return true; // Goal reached
+            }
+        }
+    }
+
+    visitedStates.erase(BoardToString(current.board)); // Backtrack
+    return false; // No solution found at this level
+}
+
+// Main IDA* function to find the solution.
+int IDAStar(const std::vector<std::vector<int>>& startBoard) {
+    State startState{
+        startBoard,
+        FindBlankPos(startBoard),
+        0,
+        ManhattanDistance(startBoard)
+    };
+
+    int bound = startState.f(); // Initial bound
+    std::unordered_set<std::string> visitedStates;
+
+    while (true) {
+        int newBound = INT_MAX; // Set to the maximum possible value
+        if (IDAStarSearch(startState, bound, newBound, visitedStates)) {
+            return startState.g; // If goal is found, return the depth (g)
+        }
+
+        if (newBound == INT_MAX) {
+            return -1; // No solution found
+        }
+
+        bound = newBound; // Increase the bound for the next iteration
+    }
 }

@@ -3,7 +3,9 @@
 #include "solution.h"
 #include <chrono>
 
-#define STEPS_TIME 0
+#define STEPS_TIME 1
+#define ASTAR 0
+#define IDA 1
 
 int run(std::vector<std::vector<int>> arr)
 {
@@ -12,7 +14,11 @@ int run(std::vector<std::vector<int>> arr)
     auto startTime = std::chrono::high_resolution_clock::now();
 #endif
 
+#if ASTAR
     int result = AStar(arr);
+#elif IDA
+    int result = IDAStar(arr);
+#endif
 
 #if STEPS_TIME
     auto endTime = std::chrono::high_resolution_clock::now();
