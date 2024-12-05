@@ -1,0 +1,11 @@
+TOPICS:
+
+-Stack buffer overflow
+    Prevention: Stack bound protection, DEP
+-Return-to-libc, ROP*
+    Prevention: ASLR, RELRO*
+-Heap buffer overflows, double-free bugs*
+-SEH attack
+-Blind ROP*
+
+
