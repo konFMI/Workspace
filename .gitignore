@@ -24,3 +24,7 @@ build/
 
 launch.json
 tasks.json
+
+Workspace.code-workspace
+
+.vagrant
